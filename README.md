@@ -3,4 +3,4 @@ First pratical work of the subject Network Configuration and Management
 
 Config files for an entreprise network
 
-![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+![alt text](file:///C:/Users/Marcos%20Mateus/Desktop/DESIGN%20AND%20CONFIGURE%20AN%20ENTERPRISE%20NETWORK.PNG)

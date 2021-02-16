@@ -1,0 +1,91 @@
+enable
+configure terminal
+
+hostname Distribution1
+ip routing
+
+vlan 2
+name vlan 2
+exit
+interface vlan 2
+ip address 10.4.2.1 255.255.255.0
+no shutdown
+exit
+
+vlan 3
+name vlan 3
+exit
+interface vlan 3
+ip address 10.4.3.1 255.255.255.0
+no shutdown
+exit
+
+vlan 1
+name vlan management
+exit
+interface vlan 1
+ip address 10.4.1.254 255.255.255.0
+no shutdown
+exit
+
+vtp domain Access
+vtp version 2
+vtp mode transparent
+
+
+interface range GigabitEthernet1/2 - 3 
+description Distribuition1 -----> Access1
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 1,2,3
+exit
+
+interface range GigabitEthernet3/0 - 1 
+description Distribution1-----> Access2
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 1,2,3
+exit
+
+interface range GigabitEthernet1/0
+description  Core2 -----> Distribuition1
+no switchport
+ip address 10.4.16.1 255.255.255.252
+ip summary-address eigrp 40 10.4.0.0 255.255.255.248
+exit
+
+interface range GigabitEthernet0/0
+description  Core1 -----> Distribuition1
+no switchport
+ip address 10.4.15.1 255.255.255.252
+ip summary-address eigrp 40 10.4.0.0 255.255.255.248
+exit
+
+ip dhcp excluded-address 10.4.2.1 10.4.2.2
+ip dhcp pool dhcp_vlan2
+network 10.4.2.0 255.255.255.0
+default-router 10.4.2.1
+exit
+
+ip dhcp excluded-address 10.4.3.1 10.4.3.2 
+ip dhcp pool dhcp_vlan3
+network 10.4.3.0 255.255.255.0
+default-router 10.4.3.1
+exit
+
+ip dhcp excluded-address 10.4.1.1 10.4.1.2
+ip dhcp pool dhcp_vlan99
+network 10.4.1.0 255.255.255.0
+default-router 10.4.1.1
+exit
+
+spanning-tree mode rapid-pvst
+spanning-tree vlan 2 root primary
+spanning-tree vlan 3 root secondary
+
+router eigrp 40
+network 10.4.0.0 0.0.255.255
+no auto-summary 
+exit

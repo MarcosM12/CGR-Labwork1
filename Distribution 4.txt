@@ -1,0 +1,67 @@
+enable
+configure terminal
+
+hostname Distribution4
+ip routing
+
+vlan 4
+name vlan 4
+exit
+interface vlan 4
+ip address 10.4.4.1 255.255.255.0
+no shutdown
+exit
+
+vlan 5
+name vlan 5
+exit
+interface vlan 5
+ip address 10.4.5.1 255.255.255.0
+no shutdown
+exit
+
+vtp domain Access
+vtp version 2
+vtp mode transparent
+
+
+
+interface GigabitEthernet 1/0 
+description Distribution4 -----> Access4
+no switchport
+ip address 10.4.12.2 255.255.255.252
+no shutdown
+exit
+
+interface GigabitEthernet 0/3
+description Distribution4 -----> Access3
+no switchport
+ip address 10.4.9.2 255.255.255.252
+no shutdown
+exit
+
+interface range GigabitEthernet2/1
+description  Core1 -----> Distribuition4
+no switchport
+ip address 10.4.22.1 255.255.255.252
+ip summary-address eigrp 40 10.4.0.0 255.255.255.248
+no shutdown
+exit
+
+interface range GigabitEthernet0/1
+description  Core2 -----> Distribuition4
+no switchport
+ip address 10.4.23.1 255.255.255.252
+ip summary-address eigrp 40 10.4.0.0 255.255.255.248
+no shutdown
+exit
+
+
+spanning-tree mode rapid-pvst
+spanning-tree vlan 5 root primary
+spanning-tree vlan 4 root secondary
+
+router eigrp 40
+network 10.4.0.0 0.0.255.255
+no auto-summary 
+exit

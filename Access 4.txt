@@ -1,0 +1,58 @@
+enable
+configure terminal
+
+hostname Access4
+ip routing
+
+interface range GigabitEthernet0/0 - 1
+description Access4 -----> PC8 & Access4 -----> PC9
+switchport mode access
+switchport access vlan 5
+exit
+interface vlan 5
+ip address 10.4.5.2 255.255.255.0
+no shutdown
+exit
+
+vlan 4
+name vlan 4
+exit
+interface vlan 4
+ip address 10.4.4.2 255.255.255.0
+no shutdown
+exit
+
+vtp domain Access
+vtp version 2
+vtp mode transparent
+
+interface GigabitEthernet 0/3
+description Access4 -----> Distribution3
+no switchport
+ip address 10.4.11.1 255.255.255.252
+ip summary-address eigrp 40 10.4.0.0 255.255.255.248
+exit
+
+interface GigabitEthernet 1/0 
+description Access4 -----> Distribution4
+no switchport
+ip address 10.4.12.1 255.255.255.252
+ip summary-address eigrp 40 10.4.0.0 255.255.255.248
+exit
+
+interface GigabitEthernet  0/2
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 4,5
+description Access4 -----> Access5
+exit
+
+
+router eigrp 40
+network 10.4.0.0 0.0.255.255
+no auto-summary 
+exit
+
+
+

@@ -1,0 +1,45 @@
+enable
+configure terminal
+
+hostname TOR
+ip routing
+
+
+interface range GigabitEthernet 0/0 - 1
+description TOR -----> Server1 & TOR -----> Server2
+switchport mode access
+switchport access vlan 20
+interface vlan 20
+ip address 10.4.27.1 255.255.255.0
+no shutdown
+exit
+
+ip dhcp excluded-address 10.4.27.1 
+ip dhcp pool dhcp_vlan20
+network 10.4.27.0 255.255.255.0
+default-router 10.4.27.1
+exit
+
+
+interface range GigabitEthernet3/0
+description  TOR -----> Core1
+no switchport
+ip address 10.4.28.2 255.255.255.252
+ip summary-address eigrp 40 10.4.0.0 255.255.255.248
+no shutdown
+exit
+
+interface range GigabitEthernet3/1
+description  TOR -----> Core2
+no switchport
+ip address 10.4.29.2 255.255.255.252
+ip summary-address eigrp 40 10.4.0.0 255.255.255.248
+no shutdown
+exit
+
+
+
+router eigrp 40
+network 10.4.0.0 0.0.255.255
+no auto-summary 
+exit

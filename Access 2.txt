@@ -1,0 +1,51 @@
+enable
+configure terminal
+
+hostname Access2
+ip routing
+
+interface GigabitEthernet0/0
+description Access2 -----> PC3
+switchport mode access
+switchport access vlan 2
+exit
+
+interface GigabitEthernet0/1
+description Access2 -----> PC4
+switchport mode access
+switchport access vlan 3
+exit
+
+vtp domain Access
+vtp version 2
+vtp mode transparent
+
+interface range GigabitEthernet 1/0 - 1
+channel-group 1 mode on
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 1,2,3
+description Access1-----> Access2(Link EtherChannel)
+exit
+
+interface range GigabitEthernet3/0 - 1 
+description Access2 -----> Distribution1
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 1,2,3
+exit
+
+
+interface range GigabitEthernet2/2 - 3 
+description Access2 -----> Distribution2
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport nonegotiate
+switchport trunk allowed vlan 1,2,3
+exit
+
+
+
+

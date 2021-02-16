@@ -1,0 +1,62 @@
+enable
+configure terminal
+
+hostname Core2
+ip routing
+
+interface range GigabitEthernet1/0
+description  Core2 -----> Distribuition1
+no switchport
+ip address 10.4.16.2 255.255.255.252
+ip summary-address eigrp 40 10.4.0.0 255.255.255.248
+exit
+
+
+interface range GigabitEthernet1/1
+description  Core2 -----> Distribuition2
+no switchport
+ip address 10.4.18.2 255.255.255.252
+ip summary-address eigrp 40 10.4.0.0 255.255.255.248
+exit
+
+interface range GigabitEthernet0/0
+description  Core2 -----> Distribuition3
+no switchport
+ip address 10.4.21.2 255.255.255.252
+ip summary-address eigrp 40 10.4.0.0 255.255.255.248
+exit
+
+interface range GigabitEthernet0/1
+description  Core2 -----> Distribuition4
+no switchport
+ip address 10.4.23.2 255.255.255.252
+ip summary-address eigrp 40 10.4.0.0 255.255.255.248
+exit
+
+interface range GigabitEthernet0/2
+description  Core2 -----> Core1
+no switchport
+ip address 10.4.19.2 255.255.255.252
+ip summary-address eigrp 40 10.4.0.0 255.255.255.248
+exit
+
+
+interface GigabitEthernet 0/3 
+description Core2 -----> Router
+no switchport
+ip address 10.4.24.1 255.255.255.252
+no shutdown
+exit
+
+interface range GigabitEthernet3/1
+description  Core2 -----> TOR
+no switchport
+ip address 10.4.29.1 255.255.255.252
+ip summary-address eigrp 40 10.4.0.0 255.255.255.248
+exit
+
+
+router eigrp 40
+network 10.4.0.0 0.0.255.255
+no auto-summary 
+exit

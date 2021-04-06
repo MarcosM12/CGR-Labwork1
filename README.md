@@ -9,5 +9,6 @@ Entripise network with two types of vlan configurations:
 1.End-to-end VLANs  
 2.Local VLANs
 
+Inter-VLAN routing was used to connect both left and rigth pod to a datacenter and a router (used to simulate an external network)
 
 All Config files for each of the network devices is provided. Project file is also provided.
